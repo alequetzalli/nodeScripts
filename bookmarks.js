@@ -23,6 +23,13 @@ class Hotkeys {
         })
     }
 
+    constructUrlList(data) {
+        const bookmarks = this.getBookmarks(data);
+        return bookmarks.map((bookmark) => {
+            return bookmark.url;
+        });
+    }
+
     readBookmarks() {
         return new Promise((resolve, reject) => {
             fs.readFile(path.join(homeDir(), "/Library/Application Support/Google/Chrome/Default/Bookmarks"),
@@ -32,14 +39,7 @@ class Hotkeys {
         });
     }
 
-    constructUrlList(data) {
-        const hotKeyBookmarks = this.getHotkeysBookmarks(data);
-        return hotKeyBookmarks.map((hotKeyBookmark) => {
-            return hotKeyBookmark.url;
-        });
-    }
-
-    getHotkeysBookmarks(data) {
+    getBookmarks(data) {
         const bookmarks = JSON.parse(data).roots.bookmark_bar.children;
         for(let folder of bookmarks) {
             if(folder.name.toLowerCase() === "hotkeys") {
