@@ -1,0 +1,15 @@
+{
+  "name": "nodescripts",
+  "version": "1.0.0",
+  "description": "A collection of automation scripts to make life easier",
+  "main": "hotkeys.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Lang",
+  "license": "ISC",
+  "dependencies": {
+    "home-dir": "^1.0.0",
+    "opn": "^5.0.0"
+  }
+}
