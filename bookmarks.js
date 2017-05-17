@@ -14,7 +14,7 @@ if(args.length) {
 }
 
 
-class Hotkeys {
+class BookMarks {
 
     constructor() {
         this.openLinks();
@@ -62,4 +62,4 @@ class Hotkeys {
 
 }
 
-new Hotkeys();
+new BookMarks();
