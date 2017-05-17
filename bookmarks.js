@@ -3,7 +3,16 @@
 const fs = require("fs"),
     homeDir = require("home-dir"),
     path = require("path"),
-    opn = require("opn");
+    opn = require("opn"),
+    args = process.argv.slice(2);
+
+let folderArg, appArg;
+
+if(args.length) {
+    folderArg = args[0].toLowerCase();
+    appArg = args[1];
+}
+
 
 class Hotkeys {
 
@@ -14,9 +23,12 @@ class Hotkeys {
     openLinks() {
         this.readBookmarks().then((data) => {
             const urlList = this.constructUrlList(data);
+            const appArg = args[1];
+
             for(let url of urlList) {
-                opn(url, {app: 'Safari'});
+                opn(url, {app: appArg || "Safari"});
             }
+
             process.exit();
         }).catch((error) => {
             console.error("Unable to read the file due to error: " + error.stack);
@@ -25,6 +37,7 @@ class Hotkeys {
 
     constructUrlList(data) {
         const bookmarks = this.getBookmarks(data);
+
         return bookmarks.map((bookmark) => {
             return bookmark.url;
         });
@@ -41,13 +54,17 @@ class Hotkeys {
 
     getBookmarks(data) {
         const bookmarks = JSON.parse(data).roots.bookmark_bar.children;
+
         for(let folder of bookmarks) {
-            if(folder.name.toLowerCase() === "hotkeys") {
+            const folderName = folder.name.toLowerCase();
+
+            if(folderName === folderArg || folderName === "hotkeys") {
                 return folder.children
             }
         }
-        console.error("sorry, there was no hotkeys folder found in your bookmarks!")
+        console.error("sorry, the specified folder was not found!");
     }
+
 }
 
 new Hotkeys();
