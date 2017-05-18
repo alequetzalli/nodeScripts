@@ -42,7 +42,7 @@ class BookMarks {
 
     readBookmarks() {
         return new Promise((resolve, reject) => {
-            fs.readFile(path.join(homeDir(), "/Library/Application Support/Google/Chrome/Default/Bookmarks"),
+            fs.readFile(this.osPaths(),
                 (error, data) => {
                 error ? reject(error) : resolve(data);
             });
@@ -58,6 +58,19 @@ class BookMarks {
             }
         }
         console.error("sorry, the specified folder was not found!");
+    }
+
+    osPaths() {
+        // code works but apparently opn module does not work well with windows os
+        const paths = {
+	        win32: path.join(homeDir(), "/AppData/Local/Google/Chrome/User Data/Default/Bookmarks") ,
+            darwin: path.join(homeDir(), "/Library/Application Support/Google/Chrome/Default/Bookmarks")
+    	}
+    	for(let path in paths) {
+            if(process.platform === path) {
+                return paths[path]
+            }
+        }
     }
 
 }
