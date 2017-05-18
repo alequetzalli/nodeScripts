@@ -63,7 +63,7 @@ class BookMarks {
     osPaths() {
         // code works but apparently opn module does not work well with windows os
         const paths = {
-	        win32: path.join(homeDir(), "/AppData/Local/Google/Chrome/User Data/Default/Bookmarks") ,
+            win32: path.join(homeDir(), "/AppData/Local/Google/Chrome/User Data/Default/Bookmarks") ,
             darwin: path.join(homeDir(), "/Library/Application Support/Google/Chrome/Default/Bookmarks")
     	}
     	for(let path in paths) {
