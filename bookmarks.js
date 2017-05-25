@@ -1,5 +1,3 @@
-//Opens all of the hotkey cheatsheets in my chrome bookmarks
-
 const fs = require("fs"),
     homeDir = require("home-dir"),
     path = require("path"),
@@ -13,7 +11,6 @@ if(args.length) {
     appArg = args[1];
 }
 
-
 class BookMarks {
 
     constructor() {
@@ -21,21 +18,21 @@ class BookMarks {
     }
 
     openLinks() {
-        this.readBookmarks().then((data) => {
+        this.readBookmarks().then(data => {
             const urlList = this.constructUrlList(data);
-            const appArg = args[1];
+            console.log(urlList)
             for(let url of urlList) {
-                opn(url, {app: appArg || "Safari"});
+                //opn(url, {app: appArg || "Google Chrome"});
             }
             process.exit();
-        }).catch((error) => {
+        }).catch(error => {
             console.error("Unable to read the file due to error: " + error.stack);
         })
     }
 
     constructUrlList(data) {
-        const bookmarks = this.getBookmarks(data);
-        return bookmarks.map((bookmark) => {
+        const bookmarks = this.findSpecifiedFolder(data).children;
+        return bookmarks.map(bookmark => {
             return bookmark.url;
         });
     }
@@ -49,23 +46,36 @@ class BookMarks {
         });
     }
 
-    getBookmarks(data) {
+    constructBookmarksList(data) {
+        const folder = this.findSpecifiedFolder(data);
+        let bookmarks = [];
+    }
+
+    findSpecifiedFolder(data) {
         const bookmarks = JSON.parse(data).roots.bookmark_bar.children;
-        for(let folder of bookmarks) {
-            const folderName = folder.name.toLowerCase();
-            if(folderName === folderArg || folderName === "hotkeys") {
-                return folder.children
+        let result;
+        const search = bookmarks => {
+            for(let folder of bookmarks) {
+                const folderName = folder.name.toLowerCase();
+                if(folderName === folderArg.toLowerCase()) {
+                    result = folder
+                }
+                else if(folder.children) {
+                    search(folder.children);
+                }
             }
-        }
-        console.error("sorry, the specified folder was not found!");
+            return result
+        };
+        return search(bookmarks);
     }
 
     osPaths() {
-        // code works but apparently opn module does not work well with windows os
+        // paths are correct but apparently opn module does not work well with windows os
         const paths = {
             win32: path.join(homeDir(), "/AppData/Local/Google/Chrome/User Data/Default/Bookmarks") ,
             darwin: path.join(homeDir(), "/Library/Application Support/Google/Chrome/Default/Bookmarks")
-    	}
+    	};
+
     	for(let path in paths) {
             if(process.platform === path) {
                 return paths[path]
