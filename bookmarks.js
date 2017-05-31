@@ -20,7 +20,7 @@ class BookMarks {
     openLinks() {
         this.readBookmarks().then(data => {
             const urlList = this.constructUrlList(data);
-            console.log(urlList)
+            console.log(urlList);
             for(let url of urlList) {
                 //opn(url, {app: appArg || "Google Chrome"});
             }
@@ -52,21 +52,8 @@ class BookMarks {
     }
 
     findSpecifiedFolder(data) {
-        const bookmarks = JSON.parse(data).roots.bookmark_bar.children;
-        let result;
-        const search = bookmarks => {
-            for(let folder of bookmarks) {
-                const folderName = folder.name.toLowerCase();
-                if(folderName === folderArg.toLowerCase()) {
-                    result = folder
-                }
-                else if(folder.children) {
-                    search(folder.children);
-                }
-            }
-            return result
-        };
-        return search(bookmarks);
+        const bookmarksBar = JSON.parse(data).roots.bookmark_bar.children;
+        return this.recursiveSearch(bookmarksBar);
     }
 
     osPaths() {
@@ -81,6 +68,23 @@ class BookMarks {
                 return paths[path]
             }
         }
+    }
+
+    recursiveSearch(bookmarksBar) {
+        let result;
+        const search = folderArray => {
+            for(let folder of folderArray) {
+                const folderName = folder.name.toLowerCase();
+                if(folderName === folderArg.toLowerCase()) {
+                    result = folder
+                }
+                else if(folder.children) {
+                    search(folder.children);
+                }
+            }
+            return result
+        };
+        return search(bookmarksBar);
     }
 
 }
