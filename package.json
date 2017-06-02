@@ -1,8 +1,8 @@
 {
-  "name": "nodescripts",
+  "name": "bookmarksOpener",
   "version": "1.0.0",
-  "description": "A collection of automation scripts to make life easier",
-  "main": "hotkeys.js",
+  "description": "",
+  "main": "bookmarks.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
