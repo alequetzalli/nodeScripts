@@ -1,2 +1,2 @@
-# nodeScripts
-Some utility scripts I wrote to make my life easier
+# Script to open chrome bookmarks for a given folder...
+This node script which will search your chrome bookmarks for a given folder, then programmatically open all of the bookmarks within that folder (including the ones in any nested folders within the one you specified). You can also specify the browser with which you open them.
